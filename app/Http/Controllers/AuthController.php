@@ -27,11 +27,11 @@ class AuthController extends BaseController
     {
         if (config('admin.auth.login_captcha')) {
             if (!$request->has('captcha')) {
-                return $this->response()->fail(__('admin.required', ['attribute' => __('admin.captcha')]));
+                return ApiResponse::response(false, [], __('admin.required', ['attribute' => __('admin.captcha')]));
             }
 
             if (strtolower(admin_decode($request->sys_captcha)) != strtolower($request->captcha)) {
-                return $this->response()->fail(__('admin.captcha_error'));
+                    return ApiResponse::response(false, [], __('admin.captcha_error'));
             }
         }
 
@@ -236,7 +236,7 @@ JS,
         $captcha_img = $captcha->showImg();
         $sys_captcha = admin_encode($captcha->getCaptcha());
 
-        return ApiResponse::response(true,compact('captcha_img', 'sys_captcha')),'获取验证码成功');
+        return ApiResponse::response(true,compact('captcha_img', 'sys_captcha'),'获取验证码成功');
     }
 
     public function logout(): \Illuminate\Http\JsonResponse|\Illuminate\Http\Resources\Json\JsonResource
