@@ -27,11 +27,11 @@ class AuthController extends BaseController
     {
         if (config('admin.auth.login_captcha')) {
             if (!$request->has('captcha')) {
-                return ApiResponse::response(false, [], __('admin.required', ['attribute' => __('admin.captcha')]));
+                return ApiResponse::response(20000, [], __('admin.required', ['attribute' => __('admin.captcha')]));
             }
 
             if (strtolower(admin_decode($request->sys_captcha)) != strtolower($request->captcha)) {
-                    return ApiResponse::response(false, [], __('admin.captcha_error'));
+                    return ApiResponse::response(20000, [], __('admin.captcha_error')  );
             }
         }
 
@@ -45,19 +45,17 @@ class AuthController extends BaseController
             ]);
 
             if ($validator->fails()) {
-                abort(Response::HTTP_BAD_REQUEST, $validator->errors()->first());
+                return ApiResponse::response(20000, [], $validator->errors()->first());
             }
             $adminModel = config("admin.auth.model", AdminUser::class);
             $user       = $adminModel::query()->where('username', $request->username)->first();
             if ($user && Hash::check($request->password, $user->password)) {
                 $token = $user->createToken('admin')->plainTextToken;
-
-                return $this->response()->success(compact('token'), __('admin.login_successful'));
+                return ApiResponse::response(20000, compact('token'), __('admin.login_successful'));
             }
-
-            abort(Response::HTTP_BAD_REQUEST, __('admin.login_failed'));
+            return ApiResponse::response(20000, [],__('admin.login_failed'));
         } catch (\Exception $e) {
-            return $this->response()->fail($e->getMessage());
+            return ApiResponse::response(20000, [], $e->getMessage());
         }
     }
 
