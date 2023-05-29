@@ -8,7 +8,7 @@ class ApiResponse
     {
 //     20000成功   50008：非法代币；50012:其他客户端登录；50014:令牌过期；
         return response()->json([
-            'success' => $success,
+            'code' => $success,
             'data' => $data,
             'message' => $message,
         ], $code);

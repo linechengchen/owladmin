@@ -234,7 +234,7 @@ JS,
         $captcha_img = $captcha->showImg();
         $sys_captcha = admin_encode($captcha->getCaptcha());
 
-        return ApiResponse::response(true,compact('captcha_img', 'sys_captcha'),'获取验证码成功');
+        return ApiResponse::response(20000,compact('captcha_img', 'sys_captcha'),'获取验证码成功');
     }
 
     public function logout(): \Illuminate\Http\JsonResponse|\Illuminate\Http\Resources\Json\JsonResource
